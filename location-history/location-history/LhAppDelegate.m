@@ -29,7 +29,7 @@
    [_locationManager allowDeferredLocationUpdatesUntilTraveled:CLLocationDistanceMax timeout:CLTimeIntervalMax];
    
    // movement threshold for getting new data
-   _locationManager.distanceFilter = 50; // meters
+   _locationManager.distanceFilter = 30; // meters
    
    [_locationManager startUpdatingLocation];
    
@@ -60,11 +60,12 @@
    NSError *error = nil;
    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:&error];
    NSParameterAssert(jsonData);
-   NSURL *url = [NSURL URLWithString:@"http://localhost:8000/locations"];
+   NSURL *url = [NSURL URLWithString:@"https://where-is-eugene.herokuapp.com/locations"];
    NSParameterAssert(url);
    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
    [request setValue:[NSString stringWithFormat: @"%d", [jsonData length]] forHTTPHeaderField: @"Content-Length"];
+   [request setValue:@"your-auth-token" forHTTPHeaderField:@"token"];
    [request setHTTPBody:jsonData];
    [request setHTTPMethod:@"POST"];
    
